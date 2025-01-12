@@ -2,11 +2,11 @@ from flask import Flask, request, render_template
 import joblib
 import numpy as np
 
-# Load the models
+
 systolic_model = joblib.load('bp_model_systolic.pkl')
 diastolic_model = joblib.load('bp_model_diastolic.pkl')
 
-# Initialize Flask app
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -16,23 +16,23 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get user inputs
+        
         age = float(request.form['age'])
         height = float(request.form['height'])
         weight = float(request.form['weight'])
         heart_rate = float(request.form['heart_rate'])
         
-        # Calculate BMI
+        
         bmi = weight / ((height / 100) ** 2)
         
-        # Prepare input data
+        
         input_data = np.array([[age, bmi, heart_rate]])
         
-        # Make predictions
+        
         systolic_bp = systolic_model.predict(input_data)[0]
         diastolic_bp = diastolic_model.predict(input_data)[0]
 
-        # Return results
+       
         return render_template(
             'index.html',
             systolic_bp=f"{systolic_bp:.2f}",
